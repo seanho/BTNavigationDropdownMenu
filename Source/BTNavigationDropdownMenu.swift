@@ -78,7 +78,7 @@ public class BTNavigationDropdownMenu: UIView {
             self.configuration.animationDuration = animationDuration
         }
     }
-
+    
     // The arrow next to navigation title
     public var arrowImage: UIImage! {
         didSet {
@@ -109,7 +109,7 @@ public class BTNavigationDropdownMenu: UIView {
     }
     
     public var didSelectItemAtIndexHandler: ((indexPath: Int) -> ())?
-
+    
     // Private properties
     private var tableContainerView: UIView!
     private var configuration: BTConfiguration!
@@ -173,7 +173,7 @@ public class BTNavigationDropdownMenu: UIView {
     
     func showMenu() {
         // Table view header
-        var headerView = UIView(frame: CGRectMake(0, 0, self.frame.width, 300))
+        let headerView = UIView(frame: CGRectMake(0, 0, self.frame.width, 300))
         headerView.backgroundColor = self.configuration.cellBackgroundColor
         self.tableView.tableHeaderView = headerView
         
@@ -199,12 +199,12 @@ public class BTNavigationDropdownMenu: UIView {
         
         UIView.animateWithDuration(
             self.configuration.animationDuration * 1.5,
-            delay: 0,
+            delay: 0.0,
             usingSpringWithDamping: 0.7,
             initialSpringVelocity: 0.5,
-            options: nil,
+            options: .TransitionNone,
             animations: {
-                self.tableView.frame.origin.y = CGFloat(-300)
+                self.tableView.frame.origin.y = -300
                 self.backgroundView.alpha = self.configuration.maskBackgroundOpacity
             }, completion: nil
         )
@@ -219,12 +219,12 @@ public class BTNavigationDropdownMenu: UIView {
         
         UIView.animateWithDuration(
             self.configuration.animationDuration * 1.5,
-            delay: 0,
+            delay: 0.0,
             usingSpringWithDamping: 0.7,
             initialSpringVelocity: 0.5,
-            options: nil,
+            options: .TransitionNone,
             animations: {
-                self.tableView.frame.origin.y = CGFloat(-200)
+                self.tableView.frame.origin.y = -200
             }, completion: nil
         )
         
@@ -232,9 +232,9 @@ public class BTNavigationDropdownMenu: UIView {
         UIView.animateWithDuration(self.configuration.animationDuration, delay: 0, options: UIViewAnimationOptions.TransitionNone, animations: {
             self.tableView.frame.origin.y = -CGFloat(self.items.count) * self.configuration.cellHeight - 300
             self.backgroundView.alpha = 0
-        }, completion: { _ in
-            self.tableView.removeFromSuperview()
-            self.backgroundView.removeFromSuperview()
+            }, completion: { _ in
+                self.tableView.removeFromSuperview()
+                self.backgroundView.removeFromSuperview()
         })
     }
     
@@ -243,7 +243,7 @@ public class BTNavigationDropdownMenu: UIView {
             if let selfie = self {
                 selfie.menuArrow.transform = CGAffineTransformRotate(selfie.menuArrow.transform, 180 * CGFloat(M_PI/180))
             }
-        })
+            })
     }
     
     func setMenuTitle(title: String) {
@@ -285,7 +285,7 @@ class BTConfiguration {
         let imageBundle = NSBundle(URL: url!)
         let checkMarkImagePath = imageBundle?.pathForResource("checkmark_icon", ofType: "png")
         let arrowImagePath = imageBundle?.pathForResource("arrow_down_icon", ofType: "png")
-
+        
         // Default values
         self.cellHeight = 50
         self.cellBackgroundColor = UIColor.whiteColor()
@@ -346,7 +346,7 @@ class BTTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell = BTTableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: "Cell", configuration: self.configuration)
+        let cell = BTTableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: "Cell", configuration: self.configuration)
         cell.textLabel?.text = self.items[indexPath.row] as? String
         if indexPath.row == selectedIndexPath {
             cell.checkmarkIcon.hidden = false
@@ -361,12 +361,12 @@ class BTTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
         selectedIndexPath = indexPath.row
         self.selectRowAtIndexPathHandler!(indexPath: indexPath.row)
         self.reloadData()
-        var cell = tableView.cellForRowAtIndexPath(indexPath) as? BTTableViewCell
+        let cell = tableView.cellForRowAtIndexPath(indexPath) as? BTTableViewCell
         cell?.contentView.backgroundColor = self.configuration.cellSelectionColor
     }
     
     func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
-        var cell = tableView.cellForRowAtIndexPath(indexPath) as? BTTableViewCell
+        let cell = tableView.cellForRowAtIndexPath(indexPath) as? BTTableViewCell
         cell?.checkmarkIcon.hidden = true
         cell?.contentView.backgroundColor = self.configuration.cellBackgroundColor
     }
@@ -442,4 +442,3 @@ class BTTableCellContentView: UIView {
         CGContextStrokePath(context)
     }
 }
-
